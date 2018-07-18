@@ -1,0 +1,18 @@
+:global {
+    :root {
+    margin: 0px;
+    padding: 0px;
+    background-color: papayawhip;
+    box-shadow: border-box;
+    }
+
+ body {
+    min-width: 100%;
+    min-height: 100%;
+} 
+.g-active {
+&:hover {
+    background-color: red;
+}
+}
+}   
