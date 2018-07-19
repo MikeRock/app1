@@ -1,3 +1,6 @@
 .button {
  composes: g-active from global;   
 }
+.nav {
+overscroll-behavior: none;
+}

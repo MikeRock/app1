@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { button } from "./styles.scss";
+import React, { Component } from 'react';
+import { button, nav } from './styles.scss';
 
 export default class Header extends Component {
   constructor(...args) {
     super(...args);
-    this.headerRef = React.createRef();
+    this.headerRef = this.props.refs || React.createRef();
   }
 
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a ref={this.headerRef} className={`navbar-brand`} href="#">
+      <nav ref={this.headerRef} className={` ${nav} navbar navbar-expand-lg navbar-primary bg-light`}>
+        <a className={`navbar-brand`} href="#">
           Navbar
         </a>
         <button

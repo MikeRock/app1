@@ -6,13 +6,23 @@
     box-shadow: border-box;
     }
 
+    :root *::before {
+        content:'';
+        display: table-cell;
+    }
+
  body {
     min-width: 100%;
     min-height: 100%;
 } 
 .g-active {
 &:hover {
-    background-color: red;
+    border:1px solid red;
 }
+}
+.g-detach {
+    position: fixed;
+    width: 100vw;
+    z-index: 1;
 }
 }   
