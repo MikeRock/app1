@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import anime from 'animejs';
 import PropTypes from 'prop-types';
+import ReactDOM from 'react-dom';
 
-export const IN = '_scrollEnterViewport';
-export const OUT = '_scrollLeftViewport';
-export const M_ONEOFF = '_modeOneOff';
-export const M_REPEAT = '_modeRepeat';
+const IN = '_scrollEnterViewport';
+const OUT = '_scrollLeftViewport';
+const M_ONEOFF = '_modeOneOff';
+const M_REPEAT = '_modeRepeat';
 
+export const ScrollMode = { REPEAT: M_REPEAT, ONCE: M_ONEOFF };
+export const ScrollState = { IN, OUT };
 export class ScrollTrack extends Component {
   constructor(...args) {
     super(...args);
@@ -17,6 +20,7 @@ export class ScrollTrack extends Component {
     this.outOfView = false;
     this.viewState = OUT;
     this.fired = false;
+    this.initState = false;
   }
   static defaultProps = {
     mode: M_REPEAT,
@@ -27,19 +31,18 @@ export class ScrollTrack extends Component {
   static propTypes = {
     mode: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     offset: PropTypes.number,
+    refs: PropTypes.object,
     onEnter: PropTypes.func,
     onLeave: PropTypes.func,
-    onScrolling: PropTypes.func
+    onScroll: PropTypes.func
   };
   isOneOff() {
-    return (
-      (typeof this.props.mode == 'function' && this.this.props.mode() === M_ONEOFF) ||
-      (typeof this.props.mode === 'string' && this.props.mode === M_ONEOFF)
-    );
+    let { mode } = this.props;
+    return (typeof mode == 'function' && mode() === M_ONEOFF) || (typeof mode === 'string' && mode === M_ONEOFF);
   }
   onScrollOrResize(e) {
-    this.props.onScrolling && this.props.onScrolling(e);
-    let { current: ref } = this.ref;
+    this.props.onScroll && this.props.onScroll(e, this.viewState);
+    let ref = this.props.refs ? this.props.refs.current : ReactDOM.findDOMNode(this.ref.current); //eslint-disable-line react/no-find-dom-node
     let targetTop = ref.getBoundingClientRect().top;
     let targetBottom = ref.getBoundingClientRect().bottom;
     if ((targetTop <= 0 && targetBottom <= 0) || targetTop > window.innerHeight - this.props.offset) {
@@ -54,6 +57,10 @@ export class ScrollTrack extends Component {
     } else if (this.viewState == IN && this.outOfView) {
       this.props.onLeave(e);
       this.viewState = OUT;
+    } else if (!this.initState) {
+      this.initState = true;
+      this.inView && this.props.onEnter && this.props.onEnter();
+      this.outOfView && this.props.onLeave && this.props.onLeave();
     }
   }
   componentDidMount() {
@@ -62,7 +69,16 @@ export class ScrollTrack extends Component {
     window.addEventListener('resize', this.onScrollOrResize);
   }
   render() {
-    return <div ref={this.ref}>{this.props.children}</div>;
+    return (
+      <Fragment>
+        {this.props.children &&
+          React.Children.toArray(this.props.children).map((child, idx) => {
+            if (child && idx == 0 && !this.props.refs) {
+              return React.cloneElement(child, { ref: this.ref });
+            } else return child;
+          })}
+      </Fragment>
+    );
   }
 }
 
@@ -88,15 +104,16 @@ export class ScrollLink extends Component {
   };
 
   onClickHandler(e) {
-    let scroll = document.querySelector(this.props.to).getBoundingClientRect().top - document.documentElement.clientTop;
+    let scroll =
+      this.props.to == '#' ? -document.body.scrollTop : document.querySelector(this.props.to).getBoundingClientRect().top;
     let acc = 0;
     anime({
       targets: this.obj,
-      scrollBy: scroll,
+      scrollBy: [0, 100],
       duration: this.props.duration,
       update: anim => {
         if (acc == Math.floor(anim.progress)) return;
-        window.scrollBy(0, (scroll / 100) * (Math.floor(anim.progress) - acc));
+        window.scrollBy(0, (scroll / 100) * (Math.floor(anim.progress + 0.3) - acc));
         acc = Math.floor(anim.progress);
         this.props.onProgress && this.props.onProgress(anim.progress);
       },
@@ -118,3 +135,45 @@ export class ScrollLink extends Component {
     );
   }
 }
+
+export const smoothScrollTo = (to, duration = 400) => {
+  let obj = { val: 0 };
+  let scroll = to == '#' ? -document.body.scrollTop : document.querySelector(to).getBoundingClientRect().top;
+  let acc = 0;
+  anime({
+    targets: obj,
+    val: [0, 100],
+    duration,
+    update: anim => {
+      console.log(anim.progress);
+      if (acc == Math.floor(anim.progress)) return;
+      window.scrollBy(0, (scroll / 100) * (Math.floor(anim.progress + 0.3) - acc));
+      acc = Math.floor(anim.progress);
+    },
+    complete: _ => {
+      obj.scrollBy = 0;
+      acc = 0;
+    }
+  });
+};
+
+export const smoothScrollBy = (x, y) => {
+  let acc = 0;
+  let obj = { precision: 0 };
+  anime({
+    targets: obj,
+    precision: [0, 100],
+    duration: 600,
+    elasticity: 0,
+    easing: 'linear',
+    update: anim => {
+      if (acc == Math.floor(anim.progress)) return;
+      window.scrollBy((x / 100) * (Math.floor(anim.progress + 0.3) - acc), (y / 100) * (Math.floor(anim.progress + 0.3) - acc));
+      acc = Math.floor(anim.progress);
+    },
+    complete: _ => {
+      obj.precision = 0;
+      acc = 0;
+    }
+  });
+};

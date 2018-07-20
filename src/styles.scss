@@ -71,6 +71,13 @@ transform: translateY(-50%);
     @extend  .main__img;
   }
   &__text2 {
+    transition: none;
+    opacity: 0;
     @extend .main__text;
   }
+}
+
+.show {
+  opacity:1;
+  transition: opacity 0.9s linear;
 }

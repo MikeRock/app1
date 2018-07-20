@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { button, nav } from './styles.scss';
-
+import { smoothScrollTo } from './../index';
 export default class Header extends Component {
   constructor(...args) {
     super(...args);
@@ -32,7 +32,7 @@ export default class Header extends Component {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a onClick={smoothScrollTo.bind(null, '#', 400)} className="nav-link">
                 Link
               </a>
             </li>
