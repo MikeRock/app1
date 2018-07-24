@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Run drone test\" && exit 0",
     "build": "babel-node node_modules/.bin/webpack",
     "server": "NODE_ENV=development babel-node node_modules/.bin/webpack-dev-server --hot"
   },

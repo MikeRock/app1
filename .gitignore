@@ -22,3 +22,5 @@ yarn-error.log*
 public/api
 
 .vscode
+
+.env
