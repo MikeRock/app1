@@ -168,15 +168,9 @@ export const smoothScrollBy = (x, y, duration = 500) => {
     easing: 'linear',
     elasticity: 0,
     update: anim => {
-<<<<<<< HEAD
-      if (acc == Math.floor(anim.progress)) return;
-      window.scrollBy((x / 100) * (Math.floor(anim.progress + 0.3) - acc), (y / 100) * (Math.floor(anim.progress) - acc));
-      acc = Math.floor(anim.progress);
-=======
       window.scrollBy(Math.ceil(obj.x) - acc.x, Math.ceil(obj.y) - acc.y);
       acc.x = Math.ceil(obj.x);
       acc.y = Math.ceil(obj.y);
->>>>>>> 02413f202cbfbb8edfc479fb5720e0bcfb8c01fc
     },
     complete: _ => {
       obj.x = acc.x = obj.y = acc.y0 = 0;
