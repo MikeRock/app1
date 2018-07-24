@@ -1,5 +1,5 @@
----
-build:
-  image: node
-  commands:
-    - npm run test
+pipeline:
+  build:
+    image: node:latest
+    commands:
+      - npm run test
