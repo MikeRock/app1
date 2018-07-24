@@ -9,7 +9,7 @@ import bodyParser from 'body-parser';
 dotenv.config();
 const app = express();
 
-app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, 'build')));
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
