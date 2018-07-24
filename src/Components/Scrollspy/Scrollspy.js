@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import anime from 'animejs';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-
+// VARS
 const IN = '_scrollEnterViewport';
 const OUT = '_scrollLeftViewport';
 const M_ONEOFF = '_modeOneOff';
