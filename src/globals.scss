@@ -1,3 +1,6 @@
+@import 'overrides';
+@import "node_modules/bootstrap/scss/bootstrap";
+
 :global {
     :root {
     margin: 0px;
@@ -25,5 +28,9 @@
     position: fixed;
     width: 100vw;
     z-index: 1;
+}
+
+.background-primary {
+    background: $primary;
 }
 }   

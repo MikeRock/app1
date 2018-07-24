@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Header, ScrollLink, ScrollTrack, smoothScrollBy } from './Components/index.js';
-import './globals.scss';
+import '!style-loader!css-loader!sass-loader!./globals.scss'; //eslint-disable-line 
 import style from './styles.scss';
 import anime from 'animejs';
 import { debounce, skip, side } from './helpers';
@@ -39,10 +39,10 @@ class App extends Component {
           this.debounce(e => {
             let max = Math.max(...deltas.map(Math.abs));
             let extr = deltas.find(delta => Math.abs(delta) === max);
-            if (extr > 0) smoothScrollBy(0, window.innerHeight);
-            else smoothScrollBy(0, -window.innerHeight);
+            if (extr > 0) smoothScrollBy(0, window.innerHeight, 200);
+            else smoothScrollBy(0, -window.innerHeight, 200);
             deltas = [];
-          }, 200),
+          }, 100),
           (data, e) => {
             deltas.push(e.deltaY);
             e.preventDefault();
@@ -53,13 +53,23 @@ class App extends Component {
     });
   }
   onTransitionEnter2(e) {
+    anime.remove(`.${style.main__img}`);
     anime({
       targets: `.${style.main__img}`,
       translateX: ['-1000px', '0px'],
       rotate: 720,
       scale: [{ value: 0.5 }, { value: 1, duration: 1000, delay: 200 }],
       delay: 300,
-      duration: 2000
+      duration: 2000,
+      complete: () => {
+        // Loop
+        anime({
+          targets: `.${style.main__img}`,
+          scale: [1, 0.8, 1],
+          duration: 2000,
+          loop: true
+        });
+      }
     });
     anime({
       targets: `.${style.main__text}`,
@@ -119,7 +129,7 @@ class App extends Component {
         <div className={`${style.carousel}`}>
           <div className={`${style.sentance}`}>Sentance of the day</div>
         </div>
-        <ScrollLink duration={200} to="#test2" className={`btn btn-primary`}>
+        <ScrollLink duration={200} to="#test2" className={`btn btn-success m-1 btn-lg`}>
           LINK
         </ScrollLink>
         <ScrollTrack refs={this.mainRef} onEnter={this.onTransitionEnter} />
@@ -130,7 +140,7 @@ class App extends Component {
           <div className={`${style.main__item}`}>ITEM</div>
           <div className={`${style.main__item}`}>ITEM</div>
         </div>
-        <ScrollTrack onEnter={this.onTransitionEnter2}>
+        <ScrollTrack offset={5} onEnter={this.onTransitionEnter2}>
           <div className={`${style.main} ${style.carousel}`}>
             <div className={`${style.main__img}`}>
               <div className={`${style.main__shape}`} />
@@ -144,7 +154,7 @@ class App extends Component {
             </div>
           </div>
         </ScrollTrack>
-        <ScrollTrack onEnter={this.onTransitionEnter3}>
+        <ScrollTrack offset={5} onEnter={this.onTransitionEnter3}>
           <div id="test2" className={`${style.main} ${style.carousel2}`}>
             <div className={`${style.main__text2}`}>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis tenetur tempora harum minima reprehenderit
