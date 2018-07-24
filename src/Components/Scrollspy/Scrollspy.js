@@ -168,7 +168,7 @@ export const smoothScrollBy = (x, y) => {
     easing: 'linear',
     update: anim => {
       if (acc == Math.floor(anim.progress)) return;
-      window.scrollBy((x / 100) * (Math.floor(anim.progress + 0.3) - acc), (y / 100) * (Math.floor(anim.progress + 0.3) - acc));
+      window.scrollBy((x / 100) * (Math.floor(anim.progress + 0.3) - acc), (y / 100) * (Math.floor(anim.progress) - acc));
       acc = Math.floor(anim.progress);
     },
     complete: _ => {
