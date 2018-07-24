@@ -3,4 +3,8 @@
 }
 .nav {
 overscroll-behavior: none;
+&:hover {
+  transition: opacity 0.5s linear;
+  opacity: 1 !important;
+}
 }

@@ -157,23 +157,32 @@ export const smoothScrollTo = (to, duration = 400) => {
   });
 };
 
-export const smoothScrollBy = (x, y) => {
-  let acc = 0;
-  let obj = { precision: 0 };
+export const smoothScrollBy = (x, y, duration = 500) => {
+  let acc = { x: 0, y: 0 };
+  let obj = { x: 0, y: 0 };
   anime({
     targets: obj,
-    precision: [0, 100],
-    duration: 600,
-    elasticity: 0,
+    y,
+    x,
+    duration: duration,
     easing: 'linear',
+    elasticity: 0,
     update: anim => {
+<<<<<<< HEAD
       if (acc == Math.floor(anim.progress)) return;
       window.scrollBy((x / 100) * (Math.floor(anim.progress + 0.3) - acc), (y / 100) * (Math.floor(anim.progress) - acc));
       acc = Math.floor(anim.progress);
+=======
+      window.scrollBy(Math.ceil(obj.x) - acc.x, Math.ceil(obj.y) - acc.y);
+      acc.x = Math.ceil(obj.x);
+      acc.y = Math.ceil(obj.y);
+>>>>>>> 02413f202cbfbb8edfc479fb5720e0bcfb8c01fc
     },
     complete: _ => {
-      obj.precision = 0;
-      acc = 0;
+      obj.x = acc.x = obj.y = acc.y0 = 0;
     }
   });
 };
+// 1 - 0   1
+// 8 - 1   7
+// 15  8   7

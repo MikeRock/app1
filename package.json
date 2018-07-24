@@ -52,6 +52,7 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
-    "animejs": "^2.2.0"
+    "animejs": "^2.2.0",
+    "bootstrap": "^4.1.2"
   }
 }
