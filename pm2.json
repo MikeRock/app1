@@ -1,0 +1,16 @@
+{"apps": [
+    {"name":"node",
+        "script":"server.js",
+        "interpreter": "node_modules/.bin/babel-node",
+        "combine_logs": true,
+        "max_memory_restart": "100M",
+        "source_map_support": true,
+        "env_production": {
+            "NODE_ENV": "production"
+        },
+        "env_staging": {
+            "NODE_ENV": "staging"
+        },
+        "watch": true,
+        "watch_ignore": [/node_modules/,],
+        "exec_mode":"fork"}]}

@@ -2,4 +2,6 @@ pipeline:
   build:
     image: node:latest
     commands:
+      - npm -v
+      - node -v
       - npm run test
